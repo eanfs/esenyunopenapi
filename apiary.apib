@@ -1,80 +1,47 @@
 FORMAT: 1A
-HOST: http://polls.apiblueprint.org/
+HOST: https://gateway.workdesk.esenyun.com:9091
 
-# eanfs
+# 一森云JS-SDK接口
 
-Polls is a simple API allowing consumers to view polls and vote in them.
+### 调用jsapi用户授权接口,取得用户的授权码
 
-## Questions Collection [/questions]
+```
+XuntongJSBridge.call('oauthConfirm', {'ticket':'{ticketId}'},      function(result){
+  alert("结果："+JSON.stringify(result));
+});
 
-### List All Questions [GET]
+```
 
-+ Response 200 (application/json)
+### 调用扫描二维码
 
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
+```
+XuntongJSBridge.call('qrcodeScan', {'type':'qrcode'},      function(result){
+  alert("结果："+JSON.stringify(result));
+});
 
-### Create a New Question [POST]
+```
 
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
+# Group JS需要调用的API
 
-+ Request (application/json)
+## 获得授权码 [POST /esenopenplatform/openapi/oauth/authorize]
+用户打开第三方APP时以自己的身份登录后调用，生成authorization_code 临时生成
 
-        {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
-        }
-
-+ Response 201 (application/json)
++ Request
 
     + Headers
+    
+            Authorization: Bearer {access_token}
+            
+    + Body
+    
+            {
+                "ticket": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            }
 
-            Location: /questions/2
++ Response 200 (application/json)
 
     + Body
 
             {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
-                ]
+                "code": "xxxxxxxxxxx"
             }
